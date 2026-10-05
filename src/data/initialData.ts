@@ -14,11 +14,11 @@ import {
 } from '../types';
 
 export const DEFAULT_USERS: (User & { password: string })[] = [
-  { id: 1, username: '7599791753', name: 'Ankur gangwar', password: 'ankur7755', role: 'Admin' },
-  { id: 2, username: 'manager', name: 'Restaurant Manager', password: 'manager123', role: 'Manager' },
-  { id: 3, username: 'cashier', name: 'POS Cashier', password: 'cashier123', role: 'Cashier' },
-  { id: 4, username: 'waiter', name: 'Floor Waiter', password: 'waiter123', role: 'Waiter' },
-  { id: 5, username: 'kitchen', name: 'Kitchen Head', password: 'kitchen123', role: 'Kitchen' }
+  { id: 1, username: '7599791753', name: 'Ankur gangwar', email: 'a.ankur.gangwar.05@gmail.com', mobile: '7599791753', password: 'ankur7755', role: 'Admin' },
+  { id: 2, username: 'manager', name: 'Restaurant Manager', email: 'manager@ramtara.com', mobile: '9811122334', password: 'manager123', role: 'Manager' },
+  { id: 3, username: 'cashier', name: 'POS Cashier', email: 'cashier@ramtara.com', mobile: '9844455667', password: 'cashier123', role: 'Cashier' },
+  { id: 4, username: 'waiter', name: 'Floor Waiter', email: 'waiter@ramtara.com', mobile: '9833344556', password: 'waiter123', role: 'Waiter' },
+  { id: 5, username: 'kitchen', name: 'Kitchen Head', email: 'kitchen@ramtara.com', mobile: '9822233445', password: 'kitchen123', role: 'Kitchen' }
 ];
 
 export const INITIAL_SETTINGS: SystemSettings = {
@@ -35,6 +35,9 @@ export const INITIAL_SETTINGS: SystemSettings = {
   current_lang: 'English',
   prefix: 'ORD',
   sequence_format: 'DAILY_RESET',
+  admin_face_enrolled: true,
+  admin_face_photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=360&auto=format&fit=crop&q=80',
+  require_face_login: true,
 };
 
 export const INITIAL_SPACES: RestaurantSpace[] = [
@@ -62,6 +65,10 @@ export const INITIAL_STAFF: StaffMember[] = [
     monthly_salary: 35000,
     joining_date: '2023-01-15',
     employment_status: 'Active',
+    face_enrolled: true,
+    face_photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=360&auto=format&fit=crop&q=80',
+    login_enabled: true,
+    login_role: 'Manager',
   },
   {
     staff_id: 'STF-102',
@@ -72,6 +79,10 @@ export const INITIAL_STAFF: StaffMember[] = [
     monthly_salary: 28000,
     joining_date: '2023-03-10',
     employment_status: 'Active',
+    face_enrolled: true,
+    face_photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=360&auto=format&fit=crop&q=80',
+    login_enabled: true,
+    login_role: 'Kitchen',
   },
   {
     staff_id: 'STF-103',
@@ -82,6 +93,10 @@ export const INITIAL_STAFF: StaffMember[] = [
     monthly_salary: 16000,
     joining_date: '2023-06-01',
     employment_status: 'Active',
+    face_enrolled: true,
+    face_photo: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=360&auto=format&fit=crop&q=80',
+    login_enabled: true,
+    login_role: 'Waiter',
   },
   {
     staff_id: 'STF-104',
@@ -92,6 +107,10 @@ export const INITIAL_STAFF: StaffMember[] = [
     monthly_salary: 20000,
     joining_date: '2023-08-20',
     employment_status: 'Active',
+    face_enrolled: true,
+    face_photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=360&auto=format&fit=crop&q=80',
+    login_enabled: true,
+    login_role: 'Cashier',
   },
   {
     staff_id: 'STF-105',
@@ -102,6 +121,9 @@ export const INITIAL_STAFF: StaffMember[] = [
     monthly_salary: 14000,
     joining_date: '2023-11-05',
     employment_status: 'Active',
+    face_enrolled: false,
+    login_enabled: true,
+    login_role: 'Kitchen',
   },
   {
     staff_id: 'STF-106',
@@ -112,6 +134,24 @@ export const INITIAL_STAFF: StaffMember[] = [
     monthly_salary: 12000,
     joining_date: '2024-02-01',
     employment_status: 'Active',
+    face_enrolled: false,
+    login_enabled: false,
+  },
+  {
+    staff_id: 'STF-107',
+    full_name: 'Vikram Choudhary (Cab / Delivery)',
+    mobile_number: '9877788990',
+    email: 'cab@ramtara.com',
+    home_address: 'Railway Station Road, Bareilly',
+    designation: 'Cab Driver',
+    monthly_salary: 18000,
+    joining_date: '2024-03-10',
+    employment_status: 'Active',
+    face_enrolled: true,
+    face_photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=360&auto=format&fit=crop&q=80',
+    login_enabled: true,
+    login_role: 'Waiter',
+    login_pin: 'cab123',
   },
 ];
 

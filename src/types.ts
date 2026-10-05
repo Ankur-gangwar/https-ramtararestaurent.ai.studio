@@ -5,6 +5,8 @@ export interface User {
   username: string;
   name?: string;
   role: UserRole;
+  email?: string;
+  mobile?: string;
 }
 
 export interface Ingredient {
@@ -103,6 +105,10 @@ export interface SystemSettings {
   current_lang: string;
   prefix: string;
   sequence_format: 'DAILY_RESET' | 'GLOBAL';
+  admin_face_enrolled?: boolean;
+  admin_face_photo?: string;
+  admin_face_descriptor?: number[];
+  require_face_login?: boolean;
 }
 
 export type SpaceStatus = 'Available' | 'Occupied' | 'Billed' | 'Cleaning';
@@ -119,23 +125,31 @@ export interface StaffMember {
   staff_id: string;
   full_name: string;
   mobile_number: string;
+  email?: string;
   home_address: string;
-  designation: 'Chef' | 'Waiter' | 'Manager' | 'Cashier' | 'Cleaner' | 'Kitchen Helper';
+  designation: 'Chef' | 'Waiter' | 'Manager' | 'Cashier' | 'Cleaner' | 'Kitchen Helper' | 'Cab Driver' | 'Driver';
   monthly_salary: number;
   joining_date: string;
   employment_status: 'Active' | 'On Leave' | 'Terminated';
   face_enrolled?: boolean;
   face_photo?: string;
+  face_descriptor?: number[];
+  fingerprint_enrolled?: boolean;
+  fingerprint_template?: string;
+  login_enabled?: boolean;
+  login_role?: UserRole;
+  login_pin?: string;
 }
 
 export type AttendanceStatus = 'Present' | 'Absent' | 'Late' | 'Half Day' | 'On Leave';
 
 export interface AttendanceRecord {
   record_id: number;
+  attendance_id?: string;
   staff_id: string;
   log_date: string;
   attendance_status: AttendanceStatus;
-  verification_method?: 'Face' | 'Manual';
+  verification_method?: 'Face' | 'Fingerprint' | 'Manual' | 'Face Recognition' | 'Fingerprint Biometric';
   punch_in_time?: string;
   punch_out_time?: string;
   check_in_time?: string;

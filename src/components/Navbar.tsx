@@ -73,6 +73,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const getTabsForRole = () => {
     const allTabs = [
       { id: 'home', label: lang === 'hi' ? 'होम' : 'Home', icon: Home, roles: ['Admin', 'Manager', 'Cashier', 'Waiter', 'Kitchen', 'Staff'] },
+      { id: 'catalog', label: lang === 'hi' ? 'ग्राहक मेन्यू' : 'Customer Menu', icon: UtensilsCrossed, roles: ['Admin', 'Manager', 'Cashier', 'Waiter', 'Kitchen', 'Staff'] },
       { id: 'dashboard', label: lang === 'hi' ? 'डैशबोर्ड' : 'Dashboard', icon: LayoutDashboard, roles: ['Admin', 'Manager'] },
       { id: 'pos', label: lang === 'hi' ? 'बिलिंग POS' : 'Billing & POS', icon: ShoppingCart, roles: ['Admin', 'Manager', 'Cashier', 'Waiter', 'Staff'] },
       { id: 'customers', label: lang === 'hi' ? 'ग्राहक खाते' : 'Customers', icon: Users, roles: ['Admin', 'Manager', 'Staff'] },
@@ -118,8 +119,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="text-xl font-black tracking-tight text-white group-hover:text-amber-400 transition-colors">
                   Ram Tara
                 </span>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-semibold border border-amber-500/30">
-                  ERP & POS
+                <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-black border border-amber-500/30">
+                  ERP & POS V2.0
                 </span>
               </div>
               <p className="text-xs text-slate-400 font-medium group-hover:text-slate-300 transition-colors">

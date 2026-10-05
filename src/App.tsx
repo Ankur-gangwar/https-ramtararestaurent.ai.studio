@@ -7,6 +7,7 @@ import { LoginModal } from './components/LoginModal';
 import { HomeView } from './components/HomeView';
 import { POSBillingView } from './components/POSBillingView';
 import { DashboardView } from './components/DashboardView';
+import { CustomerDashboardView } from './components/CustomerDashboardView';
 import { InventoryView } from './components/InventoryView';
 import { SpoilageView } from './components/SpoilageView';
 import { RecipeBOMView } from './components/RecipeBOMView';
@@ -347,7 +348,7 @@ export default function App() {
   const handleUpdateAttendance = (
     staffId: string,
     status: AttendanceStatus,
-    method: 'Face Recognition' | 'Manual' = 'Manual',
+    method: 'Face Recognition' | 'Fingerprint Biometric' | 'Manual' = 'Manual',
     notes?: string,
     actionType?: 'IN' | 'OUT' | 'MANUAL'
   ) => {
@@ -390,15 +391,85 @@ export default function App() {
     });
   };
 
-  const handleEnrollFace = (staffId: string, photoDataUrl: string) => {
+  const handleEnrollFace = (staffId: string, photoDataUrl: string, descriptor?: number[]) => {
+    if (staffId === 'OWNER') {
+      setSettings((prev) => ({
+        ...prev,
+        admin_face_enrolled: true,
+        admin_face_photo: photoDataUrl,
+        admin_face_descriptor: descriptor,
+      }));
+      addAlert({
+        id: `face-owner-${Date.now()}`,
+        type: 'success',
+        message: `Owner / Admin biometric facial profile updated!`,
+        messageHi: `ओनर / एडमिन का बायोमेट्रिक चेहरा सफलतापूर्वक अपडेट हुआ!`,
+        timestamp: Date.now(),
+      });
+      return;
+    }
+
     setStaff((prev) =>
-      prev.map((s) => (s.staff_id === staffId ? { ...s, photo_url: photoDataUrl } : s))
+      prev.map((s) =>
+        s.staff_id === staffId
+          ? { ...s, face_enrolled: true, face_photo: photoDataUrl, face_descriptor: descriptor }
+          : s
+      )
     );
     addAlert({
       id: `face-${Date.now()}`,
       type: 'success',
-      message: `Biometric facial profile & HAAR classifier weights enrolled for ${staffId}!`,
-      messageHi: `कर्मचारी ${staffId} के बायोमेट्रिक फीचर्स और फोटो सफलतापूर्वक एनरोल हो गए!`,
+      message: `Biometric facial profile enrolled for staff ${staffId}!`,
+      messageHi: `कर्मचारी ${staffId} का चेहरा और बायोमेट्रिक फीचर्स सफलतापूर्वक पंजीकृत हुए!`,
+      timestamp: Date.now(),
+    });
+  };
+
+  const handleToggleStaffLogin = (staffId: string) => {
+    setStaff((prev) =>
+      prev.map((s) => {
+        if (s.staff_id === staffId) {
+          const nextState = s.login_enabled === false ? true : false;
+          addAlert({
+            id: `login-toggle-${Date.now()}`,
+            type: nextState ? 'success' : 'warning',
+            message: `${s.full_name} (${s.designation}) login access ${nextState ? 'ENABLED' : 'REVOKED'}.`,
+            messageHi: `${s.full_name} (${s.designation}) का लॉगिन अधिकार ${nextState ? 'सक्रिय (चालू ✓)' : 'निष्क्रिय (बंद ❌)'} कर दिया गया।`,
+            timestamp: Date.now(),
+          });
+          return { ...s, login_enabled: nextState };
+        }
+        return s;
+      })
+    );
+  };
+
+  const handleUpdateStaffLoginCredentials = (staffId: string, updates: Partial<StaffMember>) => {
+    setStaff((prev) =>
+      prev.map((s) => (s.staff_id === staffId ? { ...s, ...updates } : s))
+    );
+    addAlert({
+      id: `staff-cred-${Date.now()}`,
+      type: 'success',
+      message: `Staff credentials and login role updated successfully.`,
+      messageHi: `कर्मचारी लॉगिन विवरण व भूमिका सफलतापूर्वक सहेज ली गई।`,
+      timestamp: Date.now(),
+    });
+  };
+
+  const handleEnrollFingerprint = (staffId: string, templateHash: string) => {
+    setStaff((prev) =>
+      prev.map((s) =>
+        s.staff_id === staffId
+          ? { ...s, fingerprint_enrolled: true, fingerprint_template: templateHash }
+          : s
+      )
+    );
+    addAlert({
+      id: `fp-${Date.now()}`,
+      type: 'success',
+      message: `Biometric fingerprint template registered for staff ${staffId}!`,
+      messageHi: `कर्मचारी ${staffId} का फिंगरप्रिंट टेम्पलेट सफलतापूर्वक पंजीकृत हुआ!`,
       timestamp: Date.now(),
     });
   };
@@ -630,6 +701,15 @@ export default function App() {
             lang={lang}
           />
         )}
+        {activeTab === 'catalog' && (
+          <CustomerDashboardView
+            user={currentUser}
+            settings={settings}
+            menuItems={menuItems}
+            onNavigateTab={setActiveTab}
+            lang={lang}
+          />
+        )}
 
         {activeTab === 'dashboard' && ['Admin', 'Manager'].includes(currentUser.role) && (
           <DashboardView
@@ -697,7 +777,22 @@ export default function App() {
             onAddStaff={handleAddStaff}
             onUpdateAttendance={handleUpdateAttendance}
             onEnrollFace={handleEnrollFace}
+            onEnrollFingerprint={handleEnrollFingerprint}
             onDeleteStaff={handleDeleteStaff}
+            onToggleStaffLogin={handleToggleStaffLogin}
+            onUpdateStaffLoginCredentials={handleUpdateStaffLoginCredentials}
+            onToggleRequireFaceLogin={(required) => {
+              setSettings((prev) => ({ ...prev, require_face_login: required }));
+              addAlert({
+                id: `face-req-${Date.now()}`,
+                type: 'info',
+                message: `Face verification requirement on login ${required ? 'ENABLED' : 'DISABLED'}.`,
+                messageHi: `लॉगिन पर फ़ेस सत्यापन की अनिवार्यता ${required ? 'चालू' : 'बंद'} कर दी गई।`,
+                timestamp: Date.now(),
+              });
+            }}
+            requireFaceLogin={settings.require_face_login}
+            ownerFacePhoto={settings.admin_face_photo}
             lang={lang}
             userRole={currentUser.role}
           />
@@ -876,6 +971,15 @@ export default function App() {
         isOpen={isLoginModalOpen}
         onLoginSuccess={handleLoginSuccess}
         lang={lang}
+        staff={staff}
+        ownerFacePhoto={settings.admin_face_photo}
+        requireFaceLogin={settings.require_face_login}
+        onSaveOwnerFacePhoto={(photoUrl, descriptor) => {
+          handleEnrollFace('OWNER', photoUrl, descriptor);
+        }}
+        onEnrollStaffFace={(staffId, photoUrl, descriptor) => {
+          handleEnrollFace(staffId, photoUrl, descriptor);
+        }}
       />
     </div>
   );

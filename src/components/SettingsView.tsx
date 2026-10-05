@@ -9,6 +9,7 @@ import {
   RotateCcw,
   CheckCircle2,
   ShieldCheck,
+  Scan,
 } from 'lucide-react';
 import { SystemSettings } from '../types';
 
@@ -269,6 +270,51 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               </div>
               <span className="text-xs text-slate-500 font-medium">Thread-safe, daily auto-incremented</span>
             </div>
+          </div>
+        </div>
+
+        {/* Biometric Face Security Policy Card */}
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
+            <Scan className="w-5 h-5 text-emerald-600" />
+            <h3 className="text-sm font-bold text-slate-900">
+              {lang === 'hi' ? 'बायोमेट्रिक फ़ेस सुरक्षा व लॉगिन नीति' : 'Biometric Face Security & Login Policy'}
+            </h3>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl bg-amber-50/60 border border-amber-200">
+            <div>
+              <h4 className="text-xs font-black text-slate-900">
+                {lang === 'hi' ? 'लॉगिन में फ़ेस वेरिफिकेशन अनिवार्य करें' : 'Enforce Biometric Face Verification on Login'}
+              </h4>
+              <p className="text-[11px] text-slate-600 mt-0.5 max-w-xl">
+                {lang === 'hi'
+                  ? 'ओनर, वेटर, कैब ड्राइवर, कैशियर आदि किसी के भी लॉगिन करते समय कैमरे से लाइव चेहरा मिलान अनिवार्य होगा। किसी अन्य व्यक्ति के चेहरे से लॉगिन नहीं हो सकेगा।'
+                  : 'Requires live webcam biometric face match against enrolled profile when logging in. Imposters are blocked.'}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() =>
+                setFormData({
+                  ...formData,
+                  require_face_login: formData.require_face_login === false ? true : false,
+                })
+              }
+              className={`px-4 py-2 rounded-xl text-xs font-black transition flex items-center gap-2 shrink-0 cursor-pointer shadow-xs active:scale-95 ${
+                formData.require_face_login !== false
+                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
+                  : 'bg-slate-200 hover:bg-slate-300 text-slate-700'
+              }`}
+            >
+              <ShieldCheck className="w-4 h-4" />
+              <span>
+                {formData.require_face_login !== false
+                  ? lang === 'hi' ? 'अनिवार्य (Enforced ✓)' : 'Enforced ✓'
+                  : lang === 'hi' ? 'वैकल्पिक (Optional)' : 'Optional'}
+              </span>
+            </button>
           </div>
         </div>
 
